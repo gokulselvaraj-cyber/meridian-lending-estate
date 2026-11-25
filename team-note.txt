@@ -1,0 +1,1 @@
+Month-end: ACCRUE01 must finish before STMTGEN1 starts. When the accrual overruns past 05:00 on the last day of the month, operators restart from STEP020 and the statements show the previous day's interest. Happened in March and June. — mainframe-ops

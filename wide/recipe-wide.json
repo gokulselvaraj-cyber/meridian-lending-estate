@@ -1,0 +1,32 @@
+{
+  "recipe": "meridian-wide",
+  "version": 2,
+  "extends": "msock/standard-recipe 2026.10.46",
+  "changes": [
+    {
+      "stage": "07 Cross Source discovery",
+      "set": {
+        "synthesis_scope.kinds": [
+          "D01",
+          "D02",
+          "D03",
+          "D04",
+          "D05",
+          "D06",
+          "D07",
+          "D08",
+          "D09",
+          "D10",
+          "D11",
+          "D12",
+          "D13",
+          "D15",
+          "D16",
+          "D17",
+          "D18",
+          "D19"
+        ]
+      }
+    }
+  ]
+}
