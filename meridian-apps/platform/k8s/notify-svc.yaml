@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: notify-svc
+  namespace: lending
+  labels: {app: notify-svc}
+spec:
+  replicas: 1
+  selector:
+    matchLabels: {app: notify-svc}
+  template:
+    metadata:
+      labels: {app: notify-svc}
+    spec:
+      containers:
+        - name: notify-svc
+          image: europe-docker.pkg.dev/meridian/lending/notify-svc:1.6.2
+          env:
+            - name: KAFKA_BOOTSTRAP
+              value: meridian-events.lending.svc:9092
+            - name: LOAN_DB_DSN
+              value: postgresql://meridian-lending-db.lending.svc:5432/lending
+            - name: SMTP_HOST
+              value: smtp.meridian.invalid
+            - name: AI_GATEWAY_URL
+              value: https://ai-gateway.meridian.invalid
+          volumeMounts:
+            - {name: statements, mountPath: /data/stmt, readOnly: true}
+      volumes:
+        - name: statements
+          persistentVolumeClaim: {claimName: mainframe-statements}

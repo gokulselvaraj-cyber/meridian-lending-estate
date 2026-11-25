@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: loan-core
+  namespace: lending
+  labels: {app: loan-core, team: lending-core}
+spec:
+  replicas: 3
+  selector:
+    matchLabels: {app: loan-core}
+  template:
+    metadata:
+      labels: {app: loan-core}
+    spec:
+      containers:
+        - name: loan-core
+          image: europe-docker.pkg.dev/meridian/lending/loan-core:4.2.0
+          ports: [{containerPort: 8080}]
+          env:
+            - name: LOAN_DB_HOST
+              value: meridian-lending-db.lending.svc
+            - name: LOAN_DB_USER
+              valueFrom: {secretKeyRef: {name: loan-db, key: username}}
+            - name: LOAN_DB_PASSWORD
+              valueFrom: {secretKeyRef: {name: loan-db, key: password}}
+            - name: KAFKA_BOOTSTRAP
+              value: meridian-events.lending.svc:9092
+          readinessProbe:
+            httpGet: {path: /actuator/health/readiness, port: 8080}
+            periodSeconds: 10
+          livenessProbe:
+            httpGet: {path: /actuator/health/liveness, port: 8080}
+            periodSeconds: 20
+          resources:
+            requests: {cpu: 500m, memory: 1Gi}
+            limits: {memory: 2Gi}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: loan-core
+  namespace: lending
+spec:
+  selector: {app: loan-core}
+  ports: [{port: 80, targetPort: 8080}]

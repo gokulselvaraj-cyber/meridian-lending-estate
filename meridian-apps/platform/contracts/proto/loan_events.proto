@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package meridian.lending.events.v1;
+
+// Published by loan-core on topic lending.loan.disbursed.v1 when a loan is paid out.
+message LoanDisbursed {
+  string loan_id = 1;
+  string customer_id = 2;
+  double amount = 3;
+  string disbursed_at = 4;  // ISO-8601 instant
+}
+
+// Published by loan-core on topic lending.payment.missed.v1 when an installment is not paid by its due date.
+message PaymentMissed {
+  string loan_id = 1;
+  string customer_id = 2;
+  int32 installment_no = 3;
+  double amount_due = 4;
+  string due_date = 5;  // ISO-8601 date
+}

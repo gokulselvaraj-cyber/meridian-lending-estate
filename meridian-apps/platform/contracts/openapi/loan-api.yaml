@@ -1,0 +1,87 @@
+openapi: 3.0.3
+info:
+  title: Meridian Lending API
+  version: 4.2.0
+  description: The REST API of loan-core.
+servers:
+  - url: /api/v1
+paths:
+  /applications:
+    post:
+      operationId: submitApplication
+      summary: Submit a loan application
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: "#/components/schemas/SubmitRequest"}
+      responses:
+        "201": {description: Application received and decided}
+        "400": {description: Invalid amount or address}
+  /applications/{id}:
+    parameters:
+      - {name: id, in: path, required: true, schema: {type: string}}
+    get:
+      operationId: getApplication
+      summary: Read an application
+      responses:
+        "200": {description: The application}
+        "404": {description: Not found}
+    delete:
+      operationId: withdrawApplication
+      summary: Withdraw an application
+      responses:
+        "204": {description: Withdrawn}
+  /quotes:
+    post:
+      operationId: quote
+      summary: An indicative rate (no sign-in needed)
+      security: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                statedScore: {type: integer}
+                amount: {type: number}
+                propertyValue: {type: number}
+      responses:
+        "200": {description: The rate, in percent}
+  /loans/{loanId}:
+    parameters:
+      - {name: loanId, in: path, required: true, schema: {type: string}}
+    get:
+      operationId: getLoan
+      summary: Read a loan
+      responses:
+        "200": {description: The loan}
+  /loans/{loanId}/payments:
+    parameters:
+      - {name: loanId, in: path, required: true, schema: {type: string}}
+    post:
+      operationId: recordPayment
+      summary: Record a payment (servicing agents)
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                amount: {type: number}
+      responses:
+        "200": {description: Payment recorded}
+        "400": {description: Amount not more than zero, or more than the outstanding balance}
+components:
+  schemas:
+    SubmitRequest:
+      type: object
+      required: [customerId, requestedAmount, propertyValue, termMonths]
+      properties:
+        customerId: {type: string}
+        requestedAmount: {type: number, minimum: 5000, maximum: 2000000}
+        propertyValue: {type: number}
+        termMonths: {type: integer}
+        street: {type: string}
+        city: {type: string}
+        postcode: {type: string}

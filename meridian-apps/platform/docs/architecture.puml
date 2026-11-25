@@ -1,0 +1,23 @@
+@startuml
+title Meridian Lending: components
+
+actor Customer
+node "loan-portal" as portal
+node "loan-core" as core
+node "notify-svc" as notify
+database "meridian-lending-db" as db
+queue "meridian-events (Kafka)" as kafka
+node "loan-batch (mainframe)" as batch
+cloud "Credit bureau" as bureau
+
+Customer --> portal
+portal --> core : REST /api/v1
+portal --> notify : notification preferences
+core --> db
+core --> bureau : credit score
+core --> kafka : LoanDisbursed, PaymentMissed
+kafka --> notify
+batch --> db : EXEC SQL
+batch --> notify : statement file
+notify --> db
+@enduml

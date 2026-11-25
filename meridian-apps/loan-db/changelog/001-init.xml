@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+    <changeSet id="001-init" author="data-platform">
+        <comment>The first schema: customers, applications, loans, payments, schedules, audit.</comment>
+        <createTable tableName="CUSTOMER">
+            <column name="customer_id" type="VARCHAR(12)"><constraints primaryKey="true"/></column>
+            <column name="full_name" type="VARCHAR(120)"><constraints nullable="false"/></column>
+            <column name="national_id" type="VARCHAR(20)"><constraints nullable="false"/></column>
+            <column name="date_of_birth" type="DATE"><constraints nullable="false"/></column>
+            <column name="email" type="VARCHAR(254)"/>
+            <column name="phone" type="VARCHAR(20)"/>
+            <column name="address" type="VARCHAR(200)"/>
+            <column name="postcode" type="VARCHAR(10)"/>
+            <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
+        </createTable>
+        <createTable tableName="LOAN_APPLICATION">
+            <column name="application_id" type="VARCHAR(36)"><constraints primaryKey="true"/></column>
+            <column name="customer_id" type="VARCHAR(12)">
+                <constraints nullable="false" foreignKeyName="fk_app_customer" references="CUSTOMER(customer_id)"/>
+            </column>
+            <column name="requested_amount" type="NUMERIC(12,2)"/>
+            <column name="property_value" type="NUMERIC(12,2)"/>
+            <column name="term_months" type="INTEGER"/>
+            <column name="credit_score" type="INTEGER"/>
+            <column name="offered_rate" type="NUMERIC(5,2)"/>
+            <column name="status" type="VARCHAR(12)"/>
+            <column name="decline_reason" type="VARCHAR(200)"/>
+            <column name="submitted_at" type="TIMESTAMP"/>
+        </createTable>
+        <createTable tableName="LOAN">
+            <column name="loan_id" type="VARCHAR(10)"><constraints primaryKey="true"/></column>
+            <column name="customer_id" type="VARCHAR(12)">
+                <constraints nullable="false" foreignKeyName="fk_loan_customer" references="CUSTOMER(customer_id)"/>
+            </column>
+            <column name="principal" type="NUMERIC(12,2)"/>
+            <column name="outstanding" type="NUMERIC(12,2)"/>
+            <column name="annual_rate" type="NUMERIC(5,2)"/>
+            <column name="accrued_interest" type="NUMERIC(12,2)" defaultValueNumeric="0"/>
+            <column name="product_plan" type="VARCHAR(10)" defaultValue="STANDARD"/>
+            <column name="status" type="VARCHAR(12)"/>
+            <column name="disbursed_on" type="DATE"/>
+            <column name="closed_on" type="DATE"/>
+            <column name="late_fees_waived_ytd" type="INTEGER" defaultValueNumeric="0"/>
+        </createTable>
+        <createTable tableName="PAYMENT">
+            <column name="payment_id" type="VARCHAR(36)"><constraints primaryKey="true"/></column>
+            <column name="loan_id" type="VARCHAR(10)">
+                <constraints nullable="false" foreignKeyName="fk_payment_loan" references="LOAN(loan_id)"/>
+            </column>
+            <column name="amount" type="NUMERIC(12,2)"/>
+            <column name="received_at" type="TIMESTAMP"/>
+            <column name="recorded_by" type="VARCHAR(64)"/>
+        </createTable>
+        <createTable tableName="REPAYMENT_SCHEDULE">
+            <column name="loan_id" type="VARCHAR(10)">
+                <constraints nullable="false" foreignKeyName="fk_schedule_loan" references="LOAN(loan_id)"/>
+            </column>
+            <column name="installment_no" type="INTEGER"/>
+            <column name="due_date" type="DATE"/>
+            <column name="amount_due" type="NUMERIC(12,2)"/>
+            <column name="paid" type="BOOLEAN" defaultValueBoolean="false"/>
+        </createTable>
+        <createTable tableName="AUDIT_EVENT">
+            <column name="event_id" type="BIGINT" autoIncrement="true"><constraints primaryKey="true"/></column>
+            <column name="occurred_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
+            <column name="actor" type="VARCHAR(64)"/>
+            <column name="entity_type" type="VARCHAR(32)"/>
+            <column name="entity_id" type="VARCHAR(36)"/>
+            <column name="action" type="VARCHAR(32)"/>
+            <column name="detail" type="TEXT"/>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

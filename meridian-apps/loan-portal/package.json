@@ -1,0 +1,20 @@
+{
+  "name": "loan-portal",
+  "version": "2.8.0",
+  "private": true,
+  "description": "Meridian Lending: the customer's application and loan screens",
+  "scripts": {
+    "build": "tsc && vite build",
+    "dev": "vite"
+  },
+  "dependencies": {
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "react-router-dom": "6.23.1"
+  },
+  "devDependencies": {
+    "typescript": "5.4.5",
+    "vite": "5.2.11",
+    "@types/react": "18.3.3"
+  }
+}

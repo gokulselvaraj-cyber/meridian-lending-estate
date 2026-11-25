@@ -1,0 +1,31 @@
+# Local development: the two services and what they need.
+services:
+  loan-core:
+    build: ../loan-core
+    ports: ["8080:8080"]
+    environment:
+      LOAN_DB_HOST: postgres
+      LOAN_DB_USER: ${LOAN_DB_USER}
+      LOAN_DB_PASSWORD: ${LOAN_DB_PASSWORD}
+      KAFKA_BOOTSTRAP: kafka:9092
+    depends_on: [postgres, kafka]
+  notify-svc:
+    build: ../notify-svc
+    environment:
+      KAFKA_BOOTSTRAP: kafka:9092
+      LOAN_DB_DSN: postgresql://postgres:5432/lending
+    depends_on: [postgres, kafka]
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: lending
+      POSTGRES_USER: ${LOAN_DB_USER}
+      POSTGRES_PASSWORD: ${LOAN_DB_PASSWORD}
+  kafka:
+    image: bitnami/kafka:3.7
+    environment:
+      KAFKA_CFG_NODE_ID: "1"
+      KAFKA_CFG_PROCESS_ROLES: broker,controller
+      KAFKA_CFG_LISTENERS: PLAINTEXT://:9092,CONTROLLER://:9093
+      KAFKA_CFG_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
+      KAFKA_CFG_CONTROLLER_LISTENER_NAMES: CONTROLLER

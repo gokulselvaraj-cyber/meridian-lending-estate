@@ -1,0 +1,7 @@
+{
+  "_comment": "Test data for repository tests only. Values are chosen to hit edge cases, not product terms.",
+  "loans": [
+    {"loan_id": "LTEST0001", "customer_id": "CTEST01", "principal": 120000.00, "annual_rate": 3.10, "ltv_ratio": 0.95, "product_plan": "STANDARD", "status": "ACTIVE"},
+    {"loan_id": "LTEST0002", "customer_id": "CTEST02", "principal": 5000.00, "annual_rate": 3.10, "ltv_ratio": 0.10, "product_plan": "PLUS", "status": "CLOSED"}
+  ]
+}

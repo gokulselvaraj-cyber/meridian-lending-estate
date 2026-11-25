@@ -1,0 +1,23 @@
+asyncapi: 2.6.0
+info:
+  title: Meridian Lending events
+  version: 1.0.0
+channels:
+  lending.loan.disbursed.v1:
+    subscribe:
+      summary: A loan was paid out
+      message: {name: LoanDisbursed}
+  lending.payment.missed.v1:
+    subscribe:
+      summary: An installment was missed
+      message: {name: PaymentMissed}
+  lending.loan.closed.v1:
+    subscribe:
+      summary: A loan was repaid in full and closed
+      message:
+        name: LoanClosed
+        payload:
+          type: object
+          properties:
+            loan_id: {type: string}
+            closed_on: {type: string, format: date}

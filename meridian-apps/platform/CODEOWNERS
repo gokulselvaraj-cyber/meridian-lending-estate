@@ -1,0 +1,7 @@
+# Who reviews changes to each repo.
+/loan-core/    @meridian/lending-core
+/loan-batch/   @meridian/mainframe-ops
+/loan-db/      @meridian/data-platform
+/loan-portal/  @meridian/digital
+/notify-svc/   @meridian/customer-comms
+/platform/     @meridian/sre

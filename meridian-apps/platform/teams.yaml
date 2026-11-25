@@ -1,0 +1,19 @@
+teams:
+  lending-core:
+    lead: Priya Raman
+    slack: "#lending-core"
+  mainframe-ops:
+    lead: Tom Okafor
+    slack: "#mainframe-ops"
+  data-platform:
+    lead: Wei Zhang
+    slack: "#data-platform"
+  digital:
+    lead: Sara Lindqvist
+    slack: "#digital"
+  customer-comms:
+    lead: Ana Costa
+    slack: "#customer-comms"
+  sre:
+    lead: Marcus Bell
+    slack: "#sre"

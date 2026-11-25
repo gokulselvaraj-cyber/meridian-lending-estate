@@ -1,0 +1,41 @@
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: meridian-lending
+  description: Meridian's mortgage lending
+spec:
+  owner: lending-core
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: loan-core
+  tags: [capability-origination, capability-underwriting, capability-pricing, capability-servicing, capability-broker-partnerships]
+spec: {type: service, lifecycle: production, owner: lending-core, system: meridian-lending}
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: loan-batch
+  tags: [capability-servicing, capability-collections, capability-reporting]
+spec: {type: service, lifecycle: production, owner: mainframe-ops, system: meridian-lending}
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: loan-portal
+  tags: [capability-origination]
+spec: {type: website, lifecycle: production, owner: digital, system: meridian-lending}
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: notify-svc
+  tags: [capability-customer-communications, capability-collections]
+spec: {type: service, lifecycle: production, owner: digital, system: meridian-lending}
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: loan-db
+spec: {type: database, owner: data-platform, system: meridian-lending}

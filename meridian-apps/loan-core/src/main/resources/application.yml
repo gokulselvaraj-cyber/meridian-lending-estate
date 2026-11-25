@@ -1,0 +1,30 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    url: jdbc:postgresql://${LOAN_DB_HOST:localhost}:5432/lending
+    username: ${LOAN_DB_USER}
+    password: ${LOAN_DB_PASSWORD}
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP:localhost:9092}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+
+lending:
+  # Used by RefinanceService when it looks for refinance offers.
+  max-ltv: 0.75
+  accrual:
+    # Which AccrualEngine runs the nightly accrual: COBOL (the mainframe NIGHTLY job) or JAVA.
+    engine: COBOL
+  bureau:
+    url: https://bureau.example.invalid/v2/score
+    timeout-seconds: 3
+    retries: 2
+  topics:
+    loan-disbursed: lending.loan.disbursed.v1
+    payment-missed: lending.payment.missed.v1

@@ -1,0 +1,13 @@
+[project]
+name = "notify-svc"
+version = "1.6.2"
+description = "Meridian Lending: customer messages (welcome, dunning, hardship letters) and the statement loader"
+requires-python = ">=3.11"
+dependencies = [
+    "confluent-kafka==2.4.0",
+    "psycopg[binary]==3.1.19",
+    "httpx==0.27.0",
+]
+
+[project.scripts]
+notify-svc = "notify.main:run"

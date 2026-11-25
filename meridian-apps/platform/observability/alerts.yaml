@@ -1,0 +1,18 @@
+groups:
+  - name: lending
+    rules:
+      - alert: LoanAccrualBatchLate
+        expr: (time() - lending_nightly_batch_last_success_timestamp_seconds) > 6 * 3600 and hour() >= 6
+        for: 5m
+        labels: {severity: page, team: mainframe-ops}
+        annotations:
+          summary: The nightly accrual batch has not finished by 06:00
+          runbook: platform/docs/runbooks/accrual-batch.md
+      - alert: HighPaymentFailureRate
+        expr: |
+          sum(rate(lending_payments_total{outcome="failed"}[15m]))
+            / sum(rate(lending_payments_total[15m])) > 0.05
+        for: 15m
+        labels: {severity: page, team: lending-core}
+        annotations:
+          summary: More than 5% of payments failed over the last 15 minutes

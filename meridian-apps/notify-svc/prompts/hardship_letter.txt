@@ -1,0 +1,9 @@
+You are drafting a letter from Meridian Lending to a customer who is struggling with repayments.
+Be kind and plain. Offer a call with our support team. Do not promise to write off any debt.
+
+Customer name: {full_name}
+Customer national id: {national_id}
+Loan reference: {loan_id}
+Months in arrears: {months_in_arrears}
+
+Write the letter body only, under 250 words.
